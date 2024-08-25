@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estela y Figuras con Clic</title>
+    <style>
+        body { margin: 0; }
+        canvas { 
+            display: block; 
+            background: #f0f0f0; /* Fondo gris claro para mejor visibilidad */
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="miCanvas"></canvas>
+    <script>
+        // Obtener el canvas y ajustar su tamaño al de la ventana
+        const canvas = document.getElementById('miCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ajustar el tamaño del canvas al tamaño de la ventana
+        function ajustarTamañoCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('load', ajustarTamañoCanvas);
+        window.addEventListener('resize', ajustarTamañoCanvas);
+
+        // Variables de estado
+        let colorActual = 'rgba(85, 128, 255, 0.4)'; // Color inicial con transparencia
+        let dibujarCirculo = true; // Alternar entre círculo y cuadrado
+
+        // Función para generar un color aleatorio con transparencia
+        function generarColorAleatorio(alpha = 0.6) {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
+        // Función para dibujar una figura pequeña (estela) en la posición del cursor
+        function dibujarFiguraPequeña(event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const tamaño = Math.floor(Math.random() * 5) + 5; // Tamaño entre 5 y 10
+
+            ctx.fillStyle = colorActual;
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 1;
+
+            if (dibujarCirculo) {
+                ctx.beginPath();
+                ctx.arc(x, y, tamaño, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            } else {
+                ctx.beginPath();
+                ctx.rect(x - tamaño / 2, y - tamaño / 2, tamaño, tamaño);
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+
+        // Función para dibujar una figura grande al hacer clic
+        function dibujarFiguraGrande(event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const tamaño = Math.floor(Math.random() * 50) + 50; // Tamaño entre 50 y 100
+
+            ctx.fillStyle = colorActual;
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+
+            if (dibujarCirculo) {
+                ctx.beginPath();
+                ctx.arc(x, y, tamaño, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            } else {
+                ctx.beginPath();
+                ctx.rect(x - tamaño / 2, y - tamaño / 2, tamaño, tamaño);
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+
+        // Evento para cambiar el color al entrar en el canvas
+        canvas.addEventListener('mouseenter', () => {
+            colorActual = generarColorAleatorio(0.6);
+        });
+
+        // Evento para cambiar el color y la figura al salir del canvas
+        canvas.addEventListener('mouseleave', () => {
+            colorActual = generarColorAleatorio(0.6);
+            dibujarCirculo = !dibujarCirculo; // Alternar la figura
+        });
+
+        // Evento para dibujar la estela pequeña mientras se mueve el mouse
+        canvas.addEventListener('mousemove', dibujarFiguraPequeña);
+
+        // Evento para dibujar la figura grande al hacer clic
+        canvas.addEventListener('mousedown', dibujarFiguraGrande);
+    </script>
+</body>
+</html>

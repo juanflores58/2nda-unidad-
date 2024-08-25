@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dibujo con Estela y Figuras con Transparencia</title>
+    <style>
+        body { margin: 0; }
+        canvas { 
+            display: block; 
+            background: #f0f0f0; /* Fondo gris claro para mejor visibilidad */
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="miCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('miCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ajustar el tamaño del canvas al tamaño de la ventana
+        function ajustarTamañoCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('load', ajustarTamañoCanvas);
+        window.addEventListener('resize', ajustarTamañoCanvas);
+
+        let dibujando = false; // Variable para verificar si el mouse está presionado
+        let dibujarCirculo = true; // Variable para alternar entre círculo y cuadrado
+        let colorFijo = 'rgba(85, 128, 255, 0.6)'; // Color inicial
+
+        // Función para generar un color aleatorio con transparencia
+        function generarColorAleatorio() {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            const alpha = 0.6; // Transparencia fija
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
+        // Función para dibujar puntitos en la posición del cursor
+        function dibujarPunto(event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const tamaño = 5; // Tamaño del puntito
+
+            ctx.fillStyle = 'black'; // Color del puntito
+            ctx.beginPath();
+            ctx.arc(x, y, tamaño / 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Función para dibujar figura (círculo o cuadrado) en la posición del cursor
+        function dibujarFigura(event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const tamano = Math.floor(Math.random() * 80) + 10; // Tamaño entre 10 y 90
+
+            ctx.strokeStyle = 'black'; // Color del contorno
+            ctx.lineWidth = 2;
+            ctx.fillStyle = colorFijo; // Color actual con transparencia
+
+            if (dibujarCirculo) {
+                // Dibujar un círculo
+                ctx.beginPath();
+                ctx.arc(x, y, tamano, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.fill();
+            } else {
+                // Dibujar un cuadrado
+                ctx.beginPath();
+                ctx.rect(x - tamano / 2, y - tamano / 2, tamano, tamano);
+                ctx.stroke();
+                ctx.fill();
+            }
+        }
+
+        // Evento para activar el dibujo cuando se presiona el mouse
+        canvas.addEventListener('mousedown', (event) => {
+            dibujando = true;
+            dibujarPunto(event); // Dibuja un punto al hacer clic
+            dibujarFigura(event); // Dibuja figura al hacer clic
+            canvas.addEventListener('mousemove', dibujarPunto); // Empieza a dibujar estela
+        });
+
+        // Evento para desactivar el dibujo cuando se suelta el mouse
+        canvas.addEventListener('mouseup', () => {
+            dibujando = false;
+            canvas.removeEventListener('mousemove', dibujarPunto); // Detiene la estela
+        });
+
+        // Evento para desactivar el dibujo si el mouse sale del canvas
+        canvas.addEventListener('mouseleave', () => {
+            if (dibujando) {
+                dibujando = false;
+                canvas.removeEventListener('mousemove', dibujarPunto);
+            }
+            colorFijo = generarColorAleatorio();
+            dibujarCirculo = !dibujarCirculo; // Cambia la figura a dibujar
+        });
+
+        // Evento para cambiar el color al entrar en el canvas
+        canvas.addEventListener('mouseenter', () => {
+            colorFijo = generarColorAleatorio();
+        });
+    </script>
+</body>
+</html>
