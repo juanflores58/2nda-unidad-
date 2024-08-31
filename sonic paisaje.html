@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recreación Mejorada con Canvas</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #87CEEB;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ajustar el tamaño del canvas al tamaño de la ventana
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Dibujar el cielo con un degradado
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#87CEEB');
+        gradient.addColorStop(1, '#0000AA');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Dibujar el sol
+        function drawSun(x, y, radius) {
+            const sunGradient = ctx.createRadialGradient(x, y, radius / 2, x, y, radius);
+            sunGradient.addColorStop(0, '#FFF200');
+            sunGradient.addColorStop(1, '#FFA500');
+            ctx.fillStyle = sunGradient;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        drawSun(100, 100, 60);
+
+        // Dibujar el suelo con patrón de cuadros
+        const squareSize = 40;
+        const rows = 2;
+        const columns = Math.ceil(canvas.width / squareSize);
+
+        for (let y = 0; y < rows; y++) {
+            for (let x = 0; x < columns; x++) {
+                ctx.fillStyle = (x + y) % 2 === 0 ? '#8B4513' : '#A0522D';
+                ctx.fillRect(x * squareSize, canvas.height - (rows - y) * squareSize, squareSize, squareSize);
+            }
+        }
+
+        // Dibujar la línea de césped con detalles
+        ctx.fillStyle = '#228B22';
+        ctx.fillRect(0, canvas.height - 2 * squareSize, canvas.width, squareSize / 2);
+
+        // Agregar detalles al césped
+        function drawGrass(x, y) {
+            ctx.strokeStyle = '#32CD32';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x - 10, y - 15);
+            ctx.lineTo(x + 10, y - 15);
+            ctx.closePath();
+            ctx.stroke();
+        }
+
+        for (let i = 0; i < canvas.width; i += 20) {
+            drawGrass(i, canvas.height - 2 * squareSize);
+        }
+
+        // Dibujar sombras suaves bajo los anillos y palmeras
+        function drawShadow(x, y, width, height) {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.beginPath();
+            ctx.ellipse(x, y, width, height, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Dibujar los anillos con un degradado dorado
+        function drawRing(x, y, radius, lineWidth) {
+            const gradient = ctx.createRadialGradient(x, y, radius / 2, x, y, radius);
+            gradient.addColorStop(0, '#FFD700');
+            gradient.addColorStop(1, '#FF8C00');
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            drawShadow(x, y + radius + 10, radius, 10);
+        }
+
+        const ringRadius = 15;
+        const ringSpacing = 60;
+        for (let i = 0; i < 3; i++) {
+            drawRing(200 + i * ringSpacing, canvas.height - 2 * squareSize - ringRadius - 10, ringRadius, 5);
+        }
+
+        // Dibujar la palmera con detalles adicionales
+        function drawPalmTree(x, y) {
+            // Sombra de la palmera
+            drawShadow(x + 10, y - 75, 30, 15);
+
+            // Tronco con textura
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(x, y - 150, 20, 150);
+            for (let i = 0; i < 5; i++) {
+                ctx.fillStyle = '#A0522D';
+                ctx.fillRect(x + 5, y - 150 + i * 30, 10, 20);
+            }
+
+            // Hojas con más detalles
+            ctx.fillStyle = '#32CD32';
+            for (let i = 0; i < 5; i++) {
+                ctx.beginPath();
+                ctx.moveTo(x + 10, y - 150);
+                ctx.lineTo(x - 40 + i * 20, y - 220 + i * 10);
+                ctx.lineTo(x + 60 - i * 20, y - 220 + i * 10);
+                ctx.fill();
+            }
+
+            // Agregar más cocos
+            ctx.fillStyle = '#654321';
+            ctx.beginPath();
+            ctx.arc(x + 10, y - 160, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x - 10, y - 160, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 20, y - 180, 10, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        drawPalmTree(300, canvas.height - 2 * squareSize);
+        drawPalmTree(500, canvas.height - 2 * squareSize);
+
+        // Dibujar la flor con más detalles
+        function drawFlower(x, y) {
+            // Tallo con textura y sombra
+            drawShadow(x, y + 40, 10, 5);
+            ctx.fillStyle = '#228B22';
+            ctx.fillRect(x - 5, y, 10, 40);
+
+            // Pétalos más detallados y sombreados
+            ctx.fillStyle = '#FFD700';
+            for (let i = 0; i < 8; i++) {
+                ctx.beginPath();
+                ctx.arc(x, y, 20, (i * Math.PI) / 4, ((i + 1) * Math.PI) / 4);
+                ctx.lineTo(x, y);
+                ctx.fill();
+            }
+
+            // Centro de la flor
+            ctx.fillStyle = '#6B8E23';
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        drawFlower(700, canvas.height - 2 * squareSize - 40);
+    </script>
+</body>
+</html>

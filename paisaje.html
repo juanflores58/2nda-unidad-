@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paisaje con Flora, Fauna, Casita y Nave Espacial</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #87CEEB;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="miCanvas" width="800" height="500"></canvas>
+    <script>
+        const canvas = document.getElementById('miCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Cielo
+        ctx.fillStyle = '#87CEEB';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Sol
+        ctx.beginPath();
+        ctx.arc(100, 100, 50, 0, Math.PI * 2, false);
+        ctx.fillStyle = 'yellow';
+        ctx.fill();
+        ctx.closePath();
+
+        // Montañas
+        ctx.beginPath();
+        ctx.moveTo(0, 400);
+        ctx.lineTo(200, 200);
+        ctx.lineTo(400, 400);
+        ctx.closePath();
+        ctx.fillStyle = '#8B4513';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(200, 400);
+        ctx.lineTo(400, 150);
+        ctx.lineTo(600, 400);
+        ctx.closePath();
+        ctx.fillStyle = '#A0522D';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(400, 400);
+        ctx.lineTo(650, 100);
+        ctx.lineTo(800, 400);
+        ctx.closePath();
+        ctx.fillStyle = '#CD853F';
+        ctx.fill();
+
+        // Césped
+        ctx.fillStyle = '#32CD32';
+        ctx.fillRect(0, 400, canvas.width, 100);
+
+        // Árbol
+        function dibujarArbol(x, y) {
+            ctx.fillStyle = '#8B4513'; // Tronco
+            ctx.fillRect(x, y, 20, 60);
+            ctx.beginPath();
+            ctx.arc(x + 10, y, 40, 0, Math.PI * 2, false); // Follaje
+            ctx.fillStyle = '#228B22';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        dibujarArbol(600, 350);
+        dibujarArbol(700, 370);
+
+        // Arbustos
+        function dibujarArbusto(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 20, 0, Math.PI * 2, false);
+            ctx.arc(x + 30, y, 25, 0, Math.PI * 2, false);
+            ctx.arc(x + 60, y, 20, 0, Math.PI * 2, false);
+            ctx.fillStyle = '#228B22';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        dibujarArbusto(100, 430);
+        dibujarArbusto(300, 420);
+
+        // Pájaro
+        function dibujarPajaro(x, y) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.quadraticCurveTo(x + 15, y - 20, x + 30, y);
+            ctx.quadraticCurveTo(x + 15, y - 20, x + 60, y);
+            ctx.strokeStyle = 'black';
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        dibujarPajaro(500, 100);
+        dibujarPajaro(550, 150);
+
+        // Casita
+        function dibujarCasita(x, y) {
+            // Base de la casa
+            ctx.fillStyle = '#8B0000';
+            ctx.fillRect(x, y, 100, 100);
+
+            // Techo
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + 50, y - 50);
+            ctx.lineTo(x + 100, y);
+            ctx.closePath();
+            ctx.fillStyle = '#B22222';
+            ctx.fill();
+
+            // Puerta
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(x + 40, y + 50, 20, 50);
+
+            // Ventanas
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(x + 15, y + 20, 20, 20);
+            ctx.fillRect(x + 65, y + 20, 20, 20);
+        }
+
+        dibujarCasita(450, 350);
+
+        // Nave espacial
+        function dibujarNave(x, y) {
+            // Cuerpo principal
+            ctx.beginPath();
+            ctx.ellipse(x, y, 50, 20, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#A9A9A9';
+            ctx.fill();
+            ctx.closePath();
+
+            // Cúpula
+            ctx.beginPath();
+            ctx.arc(x, y - 10, 20, 0, Math.PI, true);
+            ctx.fillStyle = '#11e40b';
+            ctx.fill();
+            ctx.closePath();
+
+            // Patas de la nave
+            ctx.beginPath();
+            ctx.moveTo(x - 30, y + 10);
+            ctx.lineTo(x - 50, y + 30);
+            ctx.lineTo(x - 30, y + 30);
+            ctx.moveTo(x + 30, y + 10);
+            ctx.lineTo(x + 50, y + 30);
+            ctx.lineTo(x + 30, y + 30);
+            ctx.fillStyle = '#696969';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        dibujarNave(300, 150);
+
+    </script>
+</body>
+</html>

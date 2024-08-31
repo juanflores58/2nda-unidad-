@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Mario Replica</title>
+</head>
+<body>
+    <canvas id="gameCanvas" width="940" height="820"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Dibujar el fondo
+        ctx.fillStyle = '#AEEFFF';  // Color azul claro del fondo
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Dibujar el suelo
+        ctx.fillStyle = '#F39C6B';  // Color del suelo
+        ctx.fillRect(0, 688, canvas.width, 150);
+
+        // Cargar y dibujar bloques
+        const blockImage = new Image();
+        blockImage.src = 'https://www.mariowiki.com/images/4/4f/Big_Block_SMB3.png';
+        
+        blockImage.onload = function() {
+            // Dibujar bloques usando la imagen
+            function drawBlock(x, y) {
+                ctx.drawImage(blockImage, x, y, 32, 32);
+            }
+
+            // Bloques de color naranja
+            drawBlock(64, 128);
+            drawBlock(208, 128);
+            drawBlock(346, 128);
+            drawBlock(568, 32);
+            drawBlock(448, 250);
+
+            // Dibujar bloques grandes
+            function drawLargeBlock(x, y, width, height, color) {
+                ctx.fillStyle = color;
+                ctx.fillRect(x, y, width, height);
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x, y, width, height);
+
+                // Dibujar círculos en las esquinas
+                const circleRadius = Math.min(width, height) / 20;
+                const offset = 5;  // Distancia desde el borde
+
+                ctx.fillStyle = '#5e605e';  // Color de los círculos
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 1;
+
+                // Círculo en la esquina superior izquierda
+                ctx.beginPath();
+                ctx.arc(x + offset + circleRadius, y + offset + circleRadius, circleRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Círculo en la esquina superior derecha
+                ctx.beginPath();
+                ctx.arc(x + width - offset - circleRadius, y + offset + circleRadius, circleRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Círculo en la esquina inferior izquierda
+                ctx.beginPath();
+                ctx.arc(x + offset + circleRadius, y + height - offset - circleRadius, circleRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Círculo en la esquina inferior derecha
+                ctx.beginPath();
+                ctx.arc(x + width - offset - circleRadius, y + height - offset - circleRadius, circleRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            drawLargeBlock(170, 450, 200, 250, '#8FD1FF');  // Bloque grande azul
+            drawLargeBlock(96, 530, 150, 175, '#F9C0C8');  // Bloque grande rosado
+            drawLargeBlock(700, 600, 300, 96, '#044c04');  // Bloque grande verde
+
+                    // Arbustos
+        function dibujarArbusto(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 20, 0, Math.PI * 2, false);
+            ctx.arc(x + 30, y, 25, 0, Math.PI * 2, false);
+            ctx.arc(x + 60, y, 20, 0, Math.PI * 2, false);
+            ctx.fillStyle = '#228B22';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        dibujarArbusto(10, 670);
+        dibujarArbusto(450, 670);
+
+            // Cargar y dibujar la tubería
+            const pipeImage = new Image();
+            pipeImage.src = 'https://www.mariowiki.com/images/9/90/MegaPipeSMB3.png';
+            pipeImage.onload = function() {
+                ctx.drawImage(pipeImage, 512, 592, 100, 130);  // Dibuja la tubería en la posición deseada
+            };
+
+            // Cargar y dibujar la planta piraña
+            const piranhaImage = new Image();
+            piranhaImage.src = 'https://www.mariowiki.com/images/2/28/SMM3DS_Art_-_BigPPlant.png';
+            piranhaImage.onload = function() {
+                ctx.drawImage(piranhaImage, 510, 490, 108, 108);  // Dibuja la planta piraña en la posición deseada
+            };
+
+            // Cargar y dibujar Mario
+            const marioImage = new Image();
+            marioImage.src = 'https://www.mariowiki.com/images/5/5e/MarioSMB2NES2.png';
+            marioImage.onload = function() {
+                ctx.drawImage(marioImage, 350, 390, 50, 50);  // Dibuja a Mario en la posición deseada
+            };
+        };
+
+    </script>
+</body>
+</html>
